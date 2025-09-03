@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+    int ser;
+    cout << "Enter number of servers: ";
+    cin >> ser;
+
+    int req;
+    cout << "\nEnter number of incoming requests: ";
+    cin >> req;
+
+    string values[100];
+    string server_data[100];  // stores requests handled by each server
+    int request_count[100] = {0}; // count requests per server
+
+    cout << "\nEnter request IDs:\n";
+    for (int i = 0; i < req; i++) {
+        cout << "Request " << i + 1 << ": ";
+        cin >> values[i];   // no ignore, no getline
+
+        // hash calculation
+        int ip_sum = 0;
+        for (char c : values[i]) {
+            if (c != '.') ip_sum += (int)c;
+        }
+
+        int hash_value = ip_sum % ser;
+
+        // assign request to server
+        server_data[hash_value] += values[i] + " ";
+        request_count[hash_value]++;
+
+        cout << "\nRequest '" << values[i] << "' is handled by Server " 
+             << hash_value << endl;
+    }
+    cout << "\n\nServer Load Summary:\n\n";
+    for (int j = 0; j < ser; j++) {
+        cout << "Server " << j << " handled " << request_count[j] << " request";
+        if (request_count[j] != 1) cout << "s";
+        cout << ": " << server_data[j] << endl;
+    }
+     return 0;
+}
+
