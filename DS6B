@@ -1,0 +1,96 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int SIZE = 5;   // Maximum number of print jobs
+
+class CircularQueue {
+    string jobs[SIZE];   // Store job names
+    int front, rear, count;
+
+public:
+    CircularQueue() {
+        front = 0;
+        rear = -1;
+        count = 0;
+    }
+
+    // Add a new print job
+    void enqueue(string jobName) {
+        if (count == SIZE) {
+            cout << "\nSpooler is full! Cannot add job \"" << jobName << "\".\n";
+            return;
+        }
+        rear = (rear + 1) % SIZE;
+        jobs[rear] = jobName;
+        count++;
+        cout << "\n Print job \"" << jobName << "\" added to the spooler.\n";
+    }
+
+    // Process/Remove a job
+    void dequeue() {
+        if (count == 0) {
+            cout << "\nNo jobs to process. Spooler is empty.\n";
+            return;
+        }
+        cout << "\n Processing print job: \"" << jobs[front] << "\"\n";
+        front = (front + 1) % SIZE;
+        count--;
+    }
+
+    // Show all jobs in the queue
+    void display() {
+        if (count == 0) {
+            cout << "\nNo jobs in the spooler.\n";
+            return;
+        }
+        cout << "\nCurrent Print Queue: ";
+        for (int i = 0; i < count; i++) {
+            int index = (front + i) % SIZE;
+            cout << "\"" << jobs[index] << "\"";
+            if (i != count - 1) cout << " -> ";
+        }
+        cout << "\n";
+    }
+};
+
+int main() {
+    CircularQueue spooler;
+    int choice;
+    string jobName;
+
+    do {
+        cout << "\n-- Printer Spooler Menu ---\n";
+        cout << "1. Add Print Job\n";
+        cout << "2. Process Print Job\n";
+        cout << "3. Show All Print Jobs\n";
+        cout << "4. Exit\n";
+        cout << "Choose an option: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            cout << "\nEnter print job name: ";
+            cin >> jobName;
+            spooler.enqueue(jobName);
+            break;
+
+        case 2:
+            spooler.dequeue();
+            break;
+
+        case 3:
+            spooler.display();
+            break;
+
+        case 4:
+            cout << "\nExiting Printer Spooler...\n";
+            break;
+
+        default:
+            cout << "\nInvalid choice! Try again.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
