@@ -1,0 +1,53 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n, e;
+    cout << "Enter number of web pages (max 10): ";
+    cin >> n;
+
+    int graph[10][10] = {0};   // Adjacency matrix
+
+    cout << "\nEnter number of hyperlinks: ";
+    cin >> e;
+
+    cout << "\nEnter links (from to):\n";
+    for (int i = 0; i < e; i++) {
+        int a, b;
+        cin >> a >> b;
+        graph[a][b] = 1;
+    }
+
+    int start;
+    cout << "\nEnter seed/start page number: ";
+    cin >> start;
+
+    cout << "\nIndexing pages starting from: " << start << endl;
+
+    int visited[10] = {0};
+    int queue[10], front = 0, rear = 0;
+
+    // Enqueue start page
+    queue[rear++] = start;
+    visited[start] = 1;
+
+    while (front < rear) {
+        int page = queue[front++];  // Dequeue
+
+        cout << "Indexed page: " << page << endl;
+
+        // Check all adjacent links
+        for (int i = 0; i < n; i++) {
+            if (graph[page][i] == 1 && visited[i] == 0) {
+                visited[i] = 1;
+                queue[rear++] = i;   // Enqueue
+            }
+        }
+    }
+
+    return 0;
+}
+
+
+
+
